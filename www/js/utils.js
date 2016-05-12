@@ -190,6 +190,7 @@ utils.factory('api', ['req', 'constants', function(req, constants) {
         getAllArticles: function(success, err) {
             var url = constants.BASE_SERVER_URL + 'resources/';
             req.get(url, success, err);
+
         }
     };
 }]);
