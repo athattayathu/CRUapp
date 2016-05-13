@@ -40,7 +40,7 @@ missionCtrl.controller('MissionsCtrl', function($scope, $location, api, constant
 })
 
 missionCtrl.controller('MissionCtrl', function($scope, $stateParams, $cordovaInAppBrowser, cal, api, constants, convenience, 
-    $localStorage, $cordovaCalendar, $ionicPopup) { 
+    $localStorage, browser, $ionicPopup) { 
     var success = function(value) {
         var val = value.data;
 
@@ -147,37 +147,7 @@ missionCtrl.controller('MissionCtrl', function($scope, $stateParams, $cordovaInA
     };
 
     $scope.showOnline = function(url) {
-        var isIOS = ionic.Platform.isIOS();
-        var isAndroid = ionic.Platform.isAndroid();
-        var options = {};
-        var browserType = '';
-        if (isIOS)
-        {
-            options = {
-                location: 'yes',
-                clearcache: 'yes',
-                toolbar: 'yes',
-                zoom: 'no'
-            };
-            browserType = '_blank';
-        }
-        else if (isAndroid)
-        {
-            options = {
-                location: 'yes',
-                clearcache: 'yes',
-                toolbar: 'no',
-                zoom: 'no'
-            };
-            browserType = '_self';
-        }
-        $cordovaInAppBrowser.open(url, browserType, options);
-
-        // $cordovaInAppBrowser.open(url, '_self', {
-        //     clearcache: 'yes',
-        //     zoom: 'no',
-        //     location: 'yes'
-        // });  
+        browser.open(url);  
     };
     
     api.getMission($stateParams.missionId, success, err);

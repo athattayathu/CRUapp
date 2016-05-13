@@ -162,7 +162,8 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
 
 })
 
-.controller('EventCtrl', function($scope, $stateParams, $location, $localStorage, cal, $cordovaInAppBrowser, api, convenience, constants) {
+.controller('EventCtrl', function($scope, $stateParams, $location, $localStorage, 
+ cal, browser, api, convenience, constants) {
     var val;
 
     var success = function(value) {
@@ -226,30 +227,6 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
     };
     
     $scope.showEventFacebook = function(url) {
-        var isIOS = ionic.Platform.isIOS();
-        var isAndroid = ionic.Platform.isAndroid();
-        var options = {};
-        var browserType = '';
-        if (isIOS)
-        {
-            options = {
-                location: 'yes',
-                clearcache: 'yes',
-                toolbar: 'yes',
-                zoom: 'no'
-            };
-            browserType = '_blank';
-        }
-        else if (isAndroid)
-        {
-            options = {
-                location: 'yes',
-                clearcache: 'yes',
-                toolbar: 'no',
-                zoom: 'no'
-            };
-            browserType = '_system';
-        }
-        $cordovaInAppBrowser.open(url, browserType, options);
+        browser.open(url);
     };
 });
