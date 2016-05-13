@@ -1,7 +1,7 @@
 var missionCtrl = angular.module('MissionCtrl', []);
 
-missionCtrl.controller('MissionsCtrl', function($scope, $location, api, constants, convenience) {
-    convenience.showLoadingScreen('Loading Summer Missions');
+missionCtrl.controller('MissionsCtrl', function($scope, $location, api, constants, convenience, uiUtil) {
+    uiUtil.showLoadingScreen('Loading Summer Missions');
     var missions = [];
 
     // on success add all the ministries to the ministries list
@@ -19,7 +19,7 @@ missionCtrl.controller('MissionsCtrl', function($scope, $location, api, constant
             }
 
             missions.push(val);
-            convenience.hideLoadingScreen();
+            uiUtil.hideLoadingScreen();
         });
     };
 

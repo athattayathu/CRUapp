@@ -22,8 +22,8 @@ campuses.service('selectedCampuses', function() {
     };
 });
 
-campuses.controller('CampusCtrl', ['$scope', '$location', 'req', 'selectedCampuses', 'constants', function($scope, $location, req, selectedCampuses, constants) {
-    var url = constants.BASE_SERVER_URL + 'campuses';
+
+campuses.controller('CampusCtrl', ['$scope', '$location','$ionicPopup', 'api', 'selectedCampuses', 'constants', function($scope, $location, $ionicPopup, api, selectedCampuses, constants) {
 
     var err = function(xhr, text, err) {
         $location.path('/app/error');
@@ -40,7 +40,7 @@ campuses.controller('CampusCtrl', ['$scope', '$location', 'req', 'selectedCampus
         $scope.choices = data.data;
     };
 
-    req.get(url, success, err);
+    api.getAllCampuses(success, err);
     $scope.title = 'Select Campuses';
     $scope.next = 'Select Ministries';
 

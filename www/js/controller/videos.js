@@ -1,8 +1,9 @@
 var videos = angular.module('videos', ['starter.controllers.utils']);
 
 videos.controller('videos_controller',function(browser, $scope, $ionicModal,
- req, convenience, constants, $location) {
-    convenience.showLoadingScreen('Loading YouTube Videos');
+ req, constants, $location, uiUtil) {
+    uiUtil.showLoadingScreen('Loading YouTube Videos');
+
 
     var CHANNEL_ID = 'UCe-RJ-3Q3tUqJciItiZmjdg';
     var YT_API_KEY = 'AIzaSyA5LSnAk7YftObCYuPSZIQi21WE6zZA1j0';
@@ -56,7 +57,7 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
 
         //Setting scope so view can have access to them
         $scope.videos = videos;
-        convenience.hideLoadingScreen();
+        uiUtil.hideLoadingScreen();
     };
 
     var failure_getting_videos = function(data) {

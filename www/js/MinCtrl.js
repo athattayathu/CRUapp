@@ -1,8 +1,8 @@
 var min = angular.module('starter.controllers.min', ["PushModule"]);
 
 min.controller('MinCtrl', function($scope, $location, $ionicHistory, req, $localStorage, $ionicPopup,
- selectedCampuses, constants, convenience, pushService) {
-    convenience.showLoadingScreen('Loading Ministries');
+ selectedCampuses, constants, pushService, uiUtil) {
+    uiUtil.showLoadingScreen('Loading Ministries');
 
     var url = constants.BASE_SERVER_URL + "ministries/search";
     
@@ -32,7 +32,7 @@ min.controller('MinCtrl', function($scope, $location, $ionicHistory, req, $local
             }
         }
         $scope.ministries = data.data;
-        convenience.hideLoadingScreen();
+        uiUtil.hideLoadingScreen();
     };
 
     var err = function(xhr, text, err) {

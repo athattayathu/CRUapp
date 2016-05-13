@@ -1,4 +1,4 @@
-angular.module('PushModule', [])
+angular.module('PushModule', ['starter.controllers.utils'])
 
 .service('pushService', function( $q, $cordovaDialogs,$cordovaPushV5, $localStorage, constants,  $http, convenience) {
     

@@ -109,7 +109,6 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         }
 
         api.getFilteredArticles(queryParams, successGettingArticles, failureGettingArticles);
-        console.log('SEARCHING' + $scope.articleSearchData.title);
 
         $scope.articleModal.hide();
     };
@@ -119,6 +118,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         api.getAllArticles(successGettingArticles, failureGettingArticles);
         $scope.isSearchingIOS = false;
         $scope.isSearchingAndroid = false;
+
 
         if ($scope.articleSearchData && $scope.articleSearchData.title !== '') {
             $scope.articleSearchData.title = '';
@@ -134,8 +134,6 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     //When successfully getting the articles from the db, the following function
     //will be executed
     var successGettingArticles = function(data) {
-        //Just a cool message
-        console.log('successGettingArticles: %O', data);
 
         for (var i = 0; i < data.data.length; ++i) {
             data.data[i].visible = true;
@@ -156,8 +154,8 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
             console.log(articles[i]);
         }
 
-        convenience.hideLoadingScreen();
-
+        uiUtil.hideLoadingScreen();
+        
         var tempTags;
         var tags = [];
         for (var artidx = 0; artidx < articles.length; artidx++) {
@@ -175,16 +173,12 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     //When failing to get the articles from the db, the following function
     //will be executed
     var failureGettingArticles = function(data) {
-        //Just a sad message :(
-        console.log('failureGettingArticles: %O', data);
 
         //Goes to that lovely error page we have
         $location.path('/app/error');
     };
 
     var successGettingArticleTags = function(data) {
-        console.log('successGettingArticleTags: %O', data);
-
         tags = data['data'];
         for (var i = 0; i < tags.length; ++i) {
             tags[i].checked = false;
@@ -193,8 +187,6 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     };
 
     var failureGettingArticleTags = function(data) {
-        //Just a sad message :(
-        console.log('failureGettingArticleTags: %O', data);
 
         //Goes to that lovely error page we have
         $location.path('/app/error');

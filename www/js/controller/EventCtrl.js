@@ -26,8 +26,8 @@ eventCtrl.createDate = function(date, time)
 }
 
 eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $location, req, constants, $ionicHistory,
- allEvents, $cordovaCalendar, convenience, api) {
-    convenience.showLoadingScreen('Loading Events');
+ allEvents, $cordovaCalendar, convenience, api, uiUtil) {
+    uiUtil.showLoadingScreen('Loading Events');
 
     var mins = $localStorage.getObject(constants.CAMPUSES_CONFIG).ministries;
     var url;
@@ -48,7 +48,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
 
             helperFunctionUpdatingCalendar(val);
             events.push(val);
-            convenience.hideLoadingScreen();
+            uiUtil.hideLoadingScreen();
         });
     };
 
