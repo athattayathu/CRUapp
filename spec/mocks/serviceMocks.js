@@ -79,6 +79,14 @@ cruMocks.factory('cal', function() {
     };
 });
 
+cruMocks.factory('browser', function() {
+    return {
+        open: function(url) {
+            // nada
+        }
+    }
+});
+
 /**
 * This service is kept similar to its original counterpart because what
 * it wraps, $http, is already mocked with angular-mocks
