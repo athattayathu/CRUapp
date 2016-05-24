@@ -197,21 +197,11 @@ groups.controller('GroupCtrl', function($scope, $location, $ionicModal, constant
 
 .controller('GroupDetailCtrl', function($scope, $stateParams, $ionicModal, $location, constants, api, $cordovaSms, $ionicPopup) {
     var id = $stateParams.id; 
-    
-    /*$scope.group = {
-        _id: 1,
-        leader: "Donald Trumpcard",
-        time: "1pm - 4pm",
-        days: "Mon, Wed, Fri",
-        description: "This is the group where Donald Trump meets to indoctronize the people with fear mongering and other bad things. I hope you enjoyed my political commentary hidden deep with the depths of the CRU app. I'll be accepting applause later, thank you for your time"
-    };*/
+
     var comSuccess = function(data) {
-		console.log(data);
         var comGroups = [];
         var com = data.data;
         var date;
-        
-        var userURL = constants.BASE_SERVER_URL + 'users/';
 
         date = parseDate(new Date(com.meetingTime));
         api.getUser(com.leaders[0], leaderSuccess(com, date, comGroups, $scope), err($location));

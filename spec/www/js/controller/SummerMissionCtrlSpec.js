@@ -116,8 +116,7 @@ describe('MissionCtrl', function() {
 describe('MissionCtrl', function() {
 	const fakeId = 2;
 	var rootScope, scope, controller, location, httpBackend,
-		mission, conv;
-	const ciab = {open: function(url, browserType, options){}};
+		mission, conv, brow;
 
 	// create a fake instance of SummerMissionCtrl to test
 	beforeEach(angular.mock.module('MissionCtrl'));
@@ -127,17 +126,18 @@ describe('MissionCtrl', function() {
 	// set up each of the variables so they are the same before each unit
 	// tests runs. Inject the following objects into my fake SummerMissionCtrl
 	// these are coming from default mock objects provided by angular itself
-	beforeEach(inject(function($rootScope, $controller, $location, $httpBackend, convenience) {
+	beforeEach(inject(function($rootScope, $controller, $location, $httpBackend, browser, convenience) {
 	    // make new general angular components
 	    rootScope = $rootScope;
 	    scope = $rootScope.$new();
 	    conv = convenience;
+      brow = browser;
 	    controller = function() {
 	    	return $controller('MissionCtrl', {
 		    	$scope: scope,
 		    	$stateParams: {missionId: fakeId},
 		    	location: $location,
-		    	$cordovaInAppBrowser: ciab,
+          browser: browser,
           $cordovaCalendar : {},
           $ionicPopup : {}
 		    });
@@ -215,13 +215,13 @@ describe('MissionCtrl', function() {
 	});
 
 	it('opens the in app browser', function() {
-		spyOn(ciab, 'open');
+		spyOn(brow, 'open');
 		httpBackend.expectGET(constants.BASE_SERVER_URL + 'summermissions/' + fakeId);
    		controller();
    		httpBackend.flush();
 
 		const testUrl = 'www.test.url';
 		scope.showOnline(testUrl);
-		expect(ciab.open).toHaveBeenCalled();
+		expect(brow.open).toHaveBeenCalled();
 	});
 });

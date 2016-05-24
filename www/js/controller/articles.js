@@ -33,7 +33,7 @@ var sortArticles = function(unsorted) {
 //constants are used for the defines in the util.js file
 //$location is used for rerouting to a different page
 articles.controller('articles_controller',function($scope, $ionicModal, req, constants,
- convenience, $location, $cordovaInAppBrowser) {
+ convenience, $location, browser) {
     convenience.showLoadingScreen('Loading Articles');
 
     // set up searching modal for articles
@@ -124,6 +124,10 @@ articles.controller('articles_controller',function($scope, $ionicModal, req, con
         req.get(url, successGettingArticles, failureGettingArticles);
         $scope.isSearching = false;
         $scope.title = 'Resources';
+
+        if ($scope.articleSearchData && $scope.articleSearchData.title !== '') {
+            $scope.articleSearchData.title = '';
+        }
     };
 
     //This will contain list of articles where the view can grab from
@@ -206,34 +210,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, req, con
     //consisting specific info for the article.
     //Also note, you have to add to the app.js file so that it routes properly
     $scope.viewSelectedArticle = function(article) {
-        //Don't really need a separate page since all we are just displaying the url
-        //page for the article
-		var isIOS = ionic.Platform.isIOS();
-		var isAndroid = ionic.Platform.isAndroid();
-		var options = {};
-		var browserType = '';
-		if (isIOS)
-		{
-			options = {
-				location: 'yes',
-				clearcache: 'yes',
-				toolbar: 'yes',
-				zoom: 'no'
-			};
-			browserType = '_blank';
-		}
-		else if (isAndroid)
-		{
-			options = {
-				location: 'yes',
-				clearcache: 'yes',
-				toolbar: 'no',
-				zoom: 'no'
-			};
-			browserType = '_self';
-		}
-		$cordovaInAppBrowser.open(article['url'], browserType, options);
-
+		browser.open(article['url']);
     };
 
 });
