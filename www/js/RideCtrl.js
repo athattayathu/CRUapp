@@ -24,6 +24,15 @@ var changeTriptype = function(triptype) {
     return triptype;
 };
 
+//sort drivers in descending order
+var sortDrivers = function(drivers) {
+    if (drivers) {
+        drivers.sort(function(a, b) {return b.seatsLeft - a.seatsLeft;});
+    }
+    
+    return drivers;
+};
+
 var parseDate = function(eventDate) {
     var locale = 'en-us';
 
@@ -330,18 +339,35 @@ ride.controller('RidesCtrl', function($scope, $location, $ionicHistory, $ionicPo
 
                 var eventDate = parseDate(new Date(ride.time));
                 var eventLocation = convenience.formatLocation(ride.location);
-
-                mydrivers.push({
-                    id: ride._id,
-                    event_id: ride.event,
-                    name: ride.driverName,
-                    phone: ride.driverNumber,
-                    time: eventDate.time,
-                    date: eventDate.date,
-                    pickup: eventLocation
-                });
+                var passengers = ride.passengers;
+                var seatsLeft;
+                
+                //there are passengers
+                if (passengers) {
+                    seatsLeft = ride.seats - passengers.length;
+                }
+                else {
+                    seatsLeft = ride.seats;
+                }
+                
+                //more seats in the car
+                if (seatsLeft > 0) {
+                    mydrivers.push({
+                        id: ride._id,
+                        event_id: ride.event,
+                        name: ride.driverName,
+                        phone: ride.driverNumber,
+                        time: eventDate.time,
+                        date: eventDate.date,
+                        pickup: eventLocation,
+                        seatsLeft: seatsLeft
+                    });
+                }
+                
             }
 
+            mydrivers = sortDrivers(mydrivers);
+            
             $scope.drivers = mydrivers;
 
         };
@@ -389,18 +415,34 @@ ride.controller('RidesCtrl', function($scope, $location, $ionicHistory, $ionicPo
 
             var eventDate = parseDate(new Date(ride.time));
             var rideLocation = convenience.formatLocation(ride.location);
-
-            mydrivers.push({
-                id: ride._id,
-                event_id: ride.event,
-                name: ride.driverName,
-                phone: ride.driverNumber,
-                time: eventDate.time,
-                date: eventDate.date,
-                pickup: rideLocation
-            });
-
+            var passengers = ride.passengers;
+            var seatsLeft;
+            
+            //passengers already in the car
+            if (passengers) {
+                seatsLeft = ride.seats - passengers.length;
+            }
+            else {
+                seatsLeft = ride.seats;
+            }
+                
+            //seats left in the car
+            if (seatsLeft > 0) {
+                mydrivers.push({
+                    id: ride._id,
+                    event_id: ride.event,
+                    name: ride.driverName,
+                    phone: ride.driverNumber,
+                    time: eventDate.time,
+                    date: eventDate.date,
+                    pickup: rideLocation,
+                    seatsLeft: seatsLeft
+                });
+            }
         }
+        
+        mydrivers = sortDrivers(mydrivers);
+        
         $scope.drivers = mydrivers;
         fullDriverList = mydrivers;
     };
@@ -434,107 +476,123 @@ ride.controller('RidesCtrl', function($scope, $location, $ionicHistory, $ionicPo
 
     $scope.checkRider = function(name, phonenumber, location, seats, leaving, triptype) {
 
-        //change the triptype to fit the server
-        triptype = changeTriptype(triptype);
+        //valid number of seats
+        if (seats > 0) {
+            //change the triptype to fit the server
+            triptype = changeTriptype(triptype);
 
-        //check if rider is valid by name in DB
-        var valid;
+            //check if rider is valid by name in DB
+            var valid;
 
-        var validSuccess = function(data) {
-            var users = data.data;
-            if (users.length > 0) {
-                valid = true;
-            }
-            else {
-                valid = false;
-            }
+            var validSuccess = function(data) {
+                var users = data.data;
+                if (users.length > 0) {
+                    valid = true;
+                }
+                else {
+                    valid = false;
+                }
 
-            if (!valid) {
-                //popup for driver error
-                var myPopup = $ionicPopup.show({
-                    template: '<p>Sorry, you are not a valid driver.</p>',
-                    title: 'Driver Error',
-                    scope: $scope,
-                    buttons: [
-                      {text: 'Ok'},
-                    ]
-                });
+                if (!valid) {
+                    //popup for driver error
+                    var myPopup = $ionicPopup.show({
+                        template: '<p>Sorry, you are not a valid driver.</p>',
+                        title: 'Driver Error',
+                        scope: $scope,
+                        buttons: [
+                          {text: 'Ok'},
+                        ]
+                    });
 
-                myPopup.then(function(res) {
-                    console.log('Driver Error', res);
-                });
+                    myPopup.then(function(res) {
+                        console.log('Driver Error', res);
+                    });
 
-                $timeout(function() {
-                    myPopup.close(); //close the popup after 3 seconds for some reason
-                }, 3000);
-            } else {
-                var success = function(data) {
-                    var driveID = data.data._id;
-                    console.log('Drive ID: ' + driveID);
+                    $timeout(function() {
+                        myPopup.close(); //close the popup after 3 seconds for some reason
+                    }, 3000);
+                } else {
+                    var success = function(data) {
+                        var driveID = data.data._id;
+                        console.log('Drive ID: ' + driveID);
 
-                    var driving = $localStorage.getObject(constants.MY_RIDES_DRIVER);
+                        var driving = $localStorage.getObject(constants.MY_RIDES_DRIVER);
 
-                    if (typeof driving.length === 'undefined' || driving.length === 0) {
-                        console.log('Not driving yet');
-                        driving = [];
-                        driving.push({
-                            rideId: tempID,
-                            driverId: driveID
-                        });
-                    } else if (checkArr(tempID, driving) === -1) {
-                        driving.push({
-                            rideId: tempID,
-                            driverId: driveID
-                        });
+                        if (typeof driving.length === 'undefined' || driving.length === 0) {
+                            console.log('Not driving yet');
+                            driving = [];
+                            driving.push({
+                                rideId: tempID,
+                                driverId: driveID
+                            });
+                        } else if (checkArr(tempID, driving) === -1) {
+                            driving.push({
+                                rideId: tempID,
+                                driverId: driveID
+                            });
+                        }
+
+                        $localStorage.setObject(constants.MY_RIDES_DRIVER, driving);
+
+                        $ionicHistory.goBack(constants.DRIVER_SIGNUP_BACK_TO_START);
+                    };
+
+                    var fail = function(data) {
+                        //if there is an error (ie 404, 500, etc) redirect to the error page
+                        $location.path('/app/error');
+                    };
+
+                    //create the post call to create the driver in the DB
+                    var gcm_id = pushService.getToken();
+                    var locationObj = convenience.getLocationObject(location);
+                    if (typeof gcm_id === 'undefined') {
+                        gcm_id = "empty";
                     }
+                    var driverData = {
+                        gcm_id: gcm_id,
+                        driverName: name,
+                        driverNumber: phonenumber,
+                        event: tempID,
+                        direction: triptype,
+                        seats: seats,
+                        /* TODO fill in the location */
+                        location: locationObj,
+                        time: leaving
+                    };
 
-                    $localStorage.setObject(constants.MY_RIDES_DRIVER, driving);
-
-                    $ionicHistory.goBack(constants.DRIVER_SIGNUP_BACK_TO_START);
-                };
-
-                var fail = function(data) {
-                    //if there is an error (ie 404, 500, etc) redirect to the error page
-                    $location.path('/app/error');
-                };
-
-                //create the post call to create the driver in the DB
-                var gcm_id = pushService.getToken();
-                var locationObj = convenience.getLocationObject(location);
-                if (typeof gcm_id === 'undefined') {
-                    gcm_id = "empty";
+                    if (validateDriverDataClientSide(driverData, $ionicPopup))
+                    {
+                        //create new driver for the given event
+                        api.createRide(driverData, success, fail);
+                    }
                 }
-                var driverData = {
-                    gcm_id: gcm_id,
-                    driverName: name,
-                    driverNumber: phonenumber,
-                    event: tempID,
-                    direction: triptype,
-                    seats: seats,
-                    /* TODO fill in the location */
-                    location: locationObj,
-                    time: leaving
-                };
+            };
 
-                if (validateDriverDataClientSide(driverData, $ionicPopup))
-                {
-                    //create new driver for the given event
-                    api.createRide(driverData, success, fail);
-                }
-            }
-        };
+            var validErr = function(data) {
+                valid = false;
+            };
+            var validData = {
+                phone: phonenumber
+            };
 
-        var validErr = function(data) {
-            valid = false;
-        };
-        var validData = {
-            phone: phonenumber
-        };
+            //might not work because some data is on the old scheme
+            api.getFilteredUsers(validData, validSuccess, validErr);
 
-        //might not work because some data is on the old scheme
-        api.getFilteredUsers(validData, validSuccess, validErr);
+        }
+        else {
+            //popup for driver error
+            var myPopup = $ionicPopup.show({
+                template: '<p>Please enter valid number of seats.</p>',
+                title: 'Driver Error',
+                scope: $scope,
+                buttons: [
+                  {text: 'Ok'},
+                ]
+            });
+        }
     };
 
+    
 })
 
 .controller('DriverViewCtrl', function($scope, $location, api, $ionicHistory, $localStorage, allEvents, constants, $stateParams, convenience) {
