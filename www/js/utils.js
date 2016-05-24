@@ -62,6 +62,36 @@ utils.factory('req', ['$window', '$http', function($window, $http) {
     };
 }]);
 
+utils.factory('browser', ['$cordovaInAppBrowser', function($cordovaInAppBrowser) {
+    return {
+        open: function(url) {
+            var isIOS = ionic.Platform.isIOS();
+            var isAndroid = ionic.Platform.isAndroid();
+            var options = {};
+            var browserType = '';
+            if (isIOS) {
+                options = {
+                    location: 'yes',
+                    clearcache: 'yes',
+                    toolbar: 'yes',
+                    zoom: 'no'
+                };
+                browserType = '_blank';
+            } else if (isAndroid) {
+                options = {
+                    location: 'yes',
+                    clearcache: 'yes',
+                    toolbar: 'no',
+                    zoom: 'no'
+                };
+                browserType = '_self';
+            }
+
+            $cordovaInAppBrowser.open(url, browserType, options);
+        }
+    };
+}]);
+
 utils.factory('api', ['req', 'constants', function(req, constants) {
     return {
         getAllEvents: function(success, err) {
@@ -156,6 +186,10 @@ utils.factory('api', ['req', 'constants', function(req, constants) {
         getFilteredArticles: function(params, success, err) {
             var url = constants.BASE_SERVER_URL + 'resources/find';
             req.post(url, params, success, err);
+        },
+        getAllArticles: function(success, err) {
+            var url = constants.BASE_SERVER_URL + 'resources/';
+            req.get(url, success, err);
         }
     };
 }]);

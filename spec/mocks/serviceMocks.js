@@ -79,6 +79,14 @@ cruMocks.factory('cal', function() {
     };
 });
 
+cruMocks.factory('browser', function() {
+    return {
+        open: function(url) {
+            // nada
+        }
+    }
+});
+
 /**
 * This service is kept similar to its original counterpart because what
 * it wraps, $http, is already mocked with angular-mocks
@@ -196,6 +204,14 @@ cruMocks.factory('api', ['req', 'constants', function(req, constants) {
         deletePassenger: function(driverID, passengerID, success, err) {
             var url = constants.BASE_SERVER_URL + 'rides/' + driverID + '/passengers/' + passengerID;
             req.delete(url, success, err);
+        },
+        getFilteredArticles: function(params, success, err) {
+            var url = constants.BASE_SERVER_URL + 'resources/find';
+            req.post(url, params, success, err);
+        },
+        getAllArticles: function(success, err) {
+            var url = constants.BASE_SERVER_URL + 'resources/';
+            req.get(url, success, err);
         }
     };
 }]);

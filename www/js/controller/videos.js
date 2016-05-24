@@ -1,15 +1,14 @@
 var videos = angular.module('videos', ['starter.controllers.utils']);
 
-videos.controller('videos_controller',function($cordovaInAppBrowser, $scope, $ionicModal,
+videos.controller('videos_controller',function(browser, $scope, $ionicModal,
  req, convenience, constants, $location) {
     convenience.showLoadingScreen('Loading YouTube Videos');
 
     var CHANNEL_ID = 'UCe-RJ-3Q3tUqJciItiZmjdg';
     var YT_API_KEY = 'AIzaSyA5LSnAk7YftObCYuPSZIQi21WE6zZA1j0';
-    //initially set the title
-    $scope.title = 'Resources';
 
     $scope.videoSearchData = {};
+    $scope.isSearching = false;
 
     // Search Modal
     $ionicModal.fromTemplateUrl('templates/resources/videos/videoSearch.html', {
@@ -27,15 +26,24 @@ videos.controller('videos_controller',function($cordovaInAppBrowser, $scope, $io
 
     // submit the search query
     $scope.search = function() {
-
+        $scope.isSearching = true;
         if (typeof $scope.videoSearchData.title !== 'undefined') {
             console.log("doing title search " + $scope.videoSearchData.title);
+            $scope.searchString = $scope.videoSearchData.title;
 
             url = "https://www.googleapis.com/youtube/v3/search?key=" + YT_API_KEY + "&channelId=" + CHANNEL_ID + "&q=" + $scope.videoSearchData.title;
             url += "&part=snippet,id&order=date&maxResults=50";
             req.get(url, success_getting_videos, failure_getting_videos);
         }
         $scope.videoModal.hide();
+    };
+
+    $scope.clearSearch = function() {
+        $scope.isSearching = false;
+        url = 'https://www.googleapis.com/youtube/v3/search?key=' + YT_API_KEY + '&channelId=' + CHANNEL_ID +
+        '&part=snippet,id&order=date&maxResults=50';
+
+        req.get(url, success_getting_videos, failure_getting_videos);
     };
 
 
@@ -64,32 +72,7 @@ videos.controller('videos_controller',function($cordovaInAppBrowser, $scope, $io
 
     $scope.view_selected_video = function(video) {
         var video_url = 'https://www.youtube.com/embed/' + video['id']['videoId'];
-        
-        var isIOS = ionic.Platform.isIOS();
-        var isAndroid = ionic.Platform.isAndroid();
-        var options = {};
-        var browserType = '';
-        if (isIOS)
-        {
-            options = {
-                location: 'yes',
-                clearcache: 'yes',
-                toolbar: 'yes',
-                zoom: 'no'
-            };
-            browserType = '_blank';
-        }
-        else if (isAndroid)
-        {
-            options = {
-                location: 'yes',
-                clearcache: 'yes',
-                toolbar: 'no',
-                zoom: 'no'
-            };
-            browserType = '_system';
-        }
-        $cordovaInAppBrowser.open(video_url, browserType, options);
+        browser.open(video_url);
     };
 
 });

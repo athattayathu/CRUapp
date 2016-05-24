@@ -1,19 +1,23 @@
-<<<<<<< Updated upstream:www/templates/videos.html
 <ion-view >
   <ion-nav-title>{{title}}</ion-nav-title>
   <ion-nav-buttons side="right">
       <button class="button button-icon button-clear ion-ios-search-strong" ng-click="openSearch()"></button>
   </ion-nav-buttons>
-  <ion-content>
-      <div class="list card" ng-repeat="video in videos">
-        <div ng-click="view_selected_video(video)">
-            <div class="item">
-                <h2><b>{{video.snippet.title}}</b></h2>
-            </div>
-            <div class="item item-body">
-                <img class="full-image" src="{{video.snippet.thumbnails.default.url}}">
-            </div>
+  <ion-header-bar class="bar bar-subheader bar-calm" ng-if="isSearching">
+        <h2 class="title">Results for: {{searchString}}</h2>
+        <div class="buttons">
+            <button class="button icon ion-close-circled" ng-click="clearSearch()"></button>
         </div>
+  </ion-header-bar>
+  <ion-content ng-class="{ 'has-subheader' : isSearching }">
+    <div class="list card" ng-repeat="video in videos">
+      <div ng-click="view_selected_video(video)">
+          <div class="item">
+              <h2><b>{{video.snippet.title}}</b></h2>
+          </div>
+          <div class="item item-body">
+              <img class="full-image" src="{{video.snippet.thumbnails.default.url}}">
+          </div>
       </div>
     </div>
   </ion-content>
