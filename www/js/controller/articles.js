@@ -39,7 +39,9 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     // set up searching modal for articles
     // data structure for holding search parameters
     $scope.articleSearchData = {};
-    $scope.isSearching = false;
+    $scope.isSearchingIOS = false;
+    $scope.isSearchingAndroid = false;
+
     // creating the modal using ionicModal
     $ionicModal.fromTemplateUrl('templates/resources/articles/articleSearch.html', {
         scope: $scope
@@ -93,7 +95,8 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         // regex (?i: makes it case insensitive)
         var queryParams = {};
         $scope.searchString = '';
-        $scope.isSearching = true;
+        $scope.isSearchingIOS = ionic.Platform.isIOS();
+        $scope.isSearchingAndroid = ionic.Platform.isAndroid();
 
         if (typeof $scope.articleSearchData.title !== 'undefined') {
             $scope.searchString += $scope.articleSearchData.title;
@@ -114,7 +117,8 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     $scope.clearSearch = function() {
         // make request to db
         api.getAllArticles(successGettingArticles, failureGettingArticles);
-        $scope.isSearching = false;
+        $scope.isSearchingIOS = false;
+        $scope.isSearchingAndroid = false;
 
         if ($scope.articleSearchData && $scope.articleSearchData.title !== '') {
             $scope.articleSearchData.title = '';
