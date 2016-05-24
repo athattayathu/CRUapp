@@ -33,10 +33,6 @@ describe('articles controller', function() {
 		expect(sortArticles([{date: 1}, {date: 2}, {date: 3}])).toEqual([{date: 3}, {date: 2}, {date: 1}]);
 	});
 
-	it('has title set correctly', function(){
-		expect(scope.title).toEqual('Resources');
-	});
-
 	it('can apply tags', function(){
 		scope.articles = [{visible: false}];
 		scope.tags = [];

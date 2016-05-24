@@ -6,10 +6,9 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
 
     var CHANNEL_ID = 'UCe-RJ-3Q3tUqJciItiZmjdg';
     var YT_API_KEY = 'AIzaSyA5LSnAk7YftObCYuPSZIQi21WE6zZA1j0';
-    //initially set the title
-    $scope.title = 'Resources';
 
     $scope.videoSearchData = {};
+    $scope.isSearching = false;
 
     // Search Modal
     $ionicModal.fromTemplateUrl('templates/resources/videos/videoSearch.html', {
@@ -27,15 +26,24 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
 
     // submit the search query
     $scope.search = function() {
-
+        $scope.isSearching = true;
         if (typeof $scope.videoSearchData.title !== 'undefined') {
             console.log("doing title search " + $scope.videoSearchData.title);
+            $scope.searchString = $scope.videoSearchData.title;
 
             url = "https://www.googleapis.com/youtube/v3/search?key=" + YT_API_KEY + "&channelId=" + CHANNEL_ID + "&q=" + $scope.videoSearchData.title;
             url += "&part=snippet,id&order=date&maxResults=50";
             req.get(url, success_getting_videos, failure_getting_videos);
         }
         $scope.videoModal.hide();
+    };
+
+    $scope.clearSearch = function() {
+        $scope.isSearching = false;
+        url = 'https://www.googleapis.com/youtube/v3/search?key=' + YT_API_KEY + '&channelId=' + CHANNEL_ID +
+        '&part=snippet,id&order=date&maxResults=50';
+
+        req.get(url, success_getting_videos, failure_getting_videos);
     };
 
 
