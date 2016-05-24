@@ -186,6 +186,10 @@ utils.factory('api', ['req', 'constants', function(req, constants) {
         getFilteredArticles: function(params, success, err) {
             var url = constants.BASE_SERVER_URL + 'resources/find';
             req.post(url, params, success, err);
+        },
+        getAllArticles: function(success, err) {
+            var url = constants.BASE_SERVER_URL + 'resources/';
+            req.get(url, success, err);
         }
     };
 }]);
