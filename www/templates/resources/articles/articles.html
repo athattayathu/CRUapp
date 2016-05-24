@@ -1,10 +1,15 @@
 <ion-view >
-    <ion-nav-title>{{title}}</ion-nav-title>
-    <ion-nav-buttons side="right" >
-        <button class="button button-icon button-clear ion-ios-close-empty" ng-click="clearSearch()" ng-if="isSearching"></button>
+    <ion-nav-title>Resources</ion-nav-title>
+    <ion-nav-buttons side="right">
         <button class="button button-icon button-clear ion-ios-search-strong" ng-click="openSearch()"></button>
     </ion-nav-buttons>
-    <ion-content>
+    <ion-header-bar class="bar bar-subheader bar-calm" ng-if="isSearching">
+        <h2 class="title">Results for: {{searchString}}</h2>
+        <div class="buttons">
+            <button class="button icon ion-close-circled" ng-click="clearSearch()"></button>
+        </div>
+    </ion-header-bar>
+    <ion-content ng-class="{ 'has-subheader' : isSearching }">
         <div class="list card" ng-repeat="article in articles" ng-if="article.visible">
             <div ng-click="viewSelectedArticle(article)">
                 <div class="item">
