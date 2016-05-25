@@ -14,7 +14,8 @@
                 </label>
                 <label class="item item-input">
                     <!-- using 15 to include country code-->
-                    <input type="tel" name="num" ng-required="true" ng-minlength="10" ng-maxlength="15" maxlength="15" placeholder="Phone Number" ng-model="groupSignupData.phone" >
+                    <input type="tel" name="num" ng-required="true" ng-minlength="10" ng-maxlength="15" maxlength="15" ng-pattern="/^1?\d{10,15}$/" placeholder="Phone Number" ng-model="groupSignupData.phone" >
+
                 </label>
 
                 <label class="item item-input">
