@@ -2,7 +2,7 @@ var utils = angular.module('starter.controllers.utils', []);
 
 // creates a list of constants that are accessible anywhere
 utils.constant('constants', {
-    'BASE_SERVER_URL': 'http://ec2-52-91-208-65.compute-1.amazonaws.com:3002/api/',
+    'BASE_SERVER_URL': 'http://ec2-52-91-208-65.compute-1.amazonaws.com:3003/api/',
     'PLACEHOLDER_IMAGE': 'img/cru-logo.jpg',
     'PERSON_IMAGE': 'img/person.png',
     'GCM_SENDER_ID': '276638088511',
@@ -50,6 +50,8 @@ utils.factory('req', ['$window', '$http', function($window, $http) {
             }).then(success, err);
         },
         post: function(url, data, success, err) {
+			console.log("in req");
+			console.log(data);
             $http.post(url, data).then(success, err);
         },
         delete: function(url, success, err) {
@@ -92,7 +94,7 @@ utils.factory('browser', ['$cordovaInAppBrowser', function($cordovaInAppBrowser)
     };
 }]);
 
-utils.factory('api', ['req', 'constants', function(req, constants) {
+utils.factory('api', ['$localStorage', 'req', 'constants', function($localStorage, req, constants) {
     return {
         getAllEvents: function(success, err) {
             var url = constants.BASE_SERVER_URL + 'events'; 
@@ -184,13 +186,24 @@ utils.factory('api', ['req', 'constants', function(req, constants) {
             req.delete(url, success, err);
         },
         getFilteredArticles: function(params, success, err) {
-            var url = constants.BASE_SERVER_URL + 'resources/find';
+		var key = $localStorage.get("leaderAPIKey");
+			console.log(key);
+            var url = constants.BASE_SERVER_URL + 'resources/find?LeaderAPIKey=' + key;
             req.post(url, params, success, err);
         },
         getAllArticles: function(success, err) {
-            var url = constants.BASE_SERVER_URL + 'resources/';
+			var key = $localStorage.get("leaderAPIKey");
+			console.log(key);
+            var url = constants.BASE_SERVER_URL + 'resources?LeaderAPIKey=' + key;
             req.get(url, success, err);
-        }
+        },
+		signin: function(username, password, success, err) {
+			var url = constants.BASE_SERVER_URL + 'signin';
+			var params = {username: username, 
+			password: password};
+			console.log(params);
+			req.post(url, params, success, err);
+		}
     };
 }]);
 
