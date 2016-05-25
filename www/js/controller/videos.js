@@ -8,7 +8,8 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
     var YT_API_KEY = 'AIzaSyA5LSnAk7YftObCYuPSZIQi21WE6zZA1j0';
 
     $scope.videoSearchData = {};
-    $scope.isSearching = false;
+    $scope.isSearchingIOS = false;
+    $scope.isSearchingAndroid = false;
 
     // Search Modal
     $ionicModal.fromTemplateUrl('templates/resources/videos/videoSearch.html', {
@@ -26,7 +27,9 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
 
     // submit the search query
     $scope.search = function() {
-        $scope.isSearching = true;
+        $scope.isSearchingIOS = ionic.Platform.isIOS();
+        $scope.isSearchingAndroid = ionic.Platform.isAndroid();
+
         if (typeof $scope.videoSearchData.title !== 'undefined') {
             console.log("doing title search " + $scope.videoSearchData.title);
             $scope.searchString = $scope.videoSearchData.title;
@@ -39,7 +42,8 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
     };
 
     $scope.clearSearch = function() {
-        $scope.isSearching = false;
+        $scope.isSearchingIOS = false;
+        $scope.isSearchingAndroid = false;
         url = 'https://www.googleapis.com/youtube/v3/search?key=' + YT_API_KEY + '&channelId=' + CHANNEL_ID +
         '&part=snippet,id&order=date&maxResults=50';
 

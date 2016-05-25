@@ -171,9 +171,11 @@ groups.controller('GroupCtrl', function($scope, $location, $ionicModal, constant
 		return matchesDay(group.days, options.days) && matchesTime(group.machineTime, options.time);
 	};
     
-    $scope.isFiltered = false;
+    $scope.isSearchingIOS = false;
+    $scope.isSearchingAndroid = false;
     $scope.filterGroups = function(meetTime) { 
-        $scope.isFiltered = true;
+        $scope.isSearchingIOS = ionic.Platform.isIOS();
+        $scope.isSearchingAndroid = ionic.Platform.isAndroid();
 
 		searchResults = [];
 		var options = {days: $scope.days, time: meetTime};
@@ -190,7 +192,8 @@ groups.controller('GroupCtrl', function($scope, $location, $ionicModal, constant
     };
 
     $scope.removeResults = function() {
-        $scope.isFiltered = false;
+        $scope.isSearchingIOS = false;
+        $scope.isSearchingAndroid = false;
         $scope.groups = comGroups;
     };
 })
