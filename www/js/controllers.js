@@ -64,6 +64,13 @@ module.controller('AppCtrl', function(pushService, $rootScope, $scope, $ionicMod
         $timeout(function()
         {
             $scope.closeLogin();
+
+            var alertPopup = $ionicPopup.alert(
+            {
+                title: '<span class="bold">Error!</span>',
+                template: 'Community Group Leader Login not yet supported.'
+            });
+
         }, 1000);
 
     };
