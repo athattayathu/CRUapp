@@ -47,7 +47,8 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
     // Triggered in the login modal to close it
     $scope.closeLogin = function() {
         $scope.modal.hide();
-        //$scope.modal.remove();
+        $scope.loginData.username = "";
+        $scope.loginData.password = "";
     };
 
     // Open the login modal
@@ -79,19 +80,11 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
 	};
     // Perform the login action when the user submits the login form
     $scope.doLogin = function() {
-		console.log($scope.loginData.username);
-		console.log($scope.loginData.password);
 		api.signin($scope.loginData.username, $scope.loginData.password, loginSuc, loginFail);
-        // Simulate a login delay. Remove this and replace with your login
-        // code if using a login system
-        /*$timeout(function() 
-        {
-            $scope.closeLogin();
-        }, 1000);*/
     };
 
     /**
-    * Set up push notification 
+    * Set up push notification
     */
     $rootScope.$on('$cordovaPushV5:notificationReceived', pushService.onNotificationRecieved);//);
     //error happened
@@ -99,7 +92,7 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
 
 
 
-  //set up when the application is ready 
+  //set up when the application is ready
   $ionicPlatform.ready(function(){
     // call to register automatically upon device ready
 

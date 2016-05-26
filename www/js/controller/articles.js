@@ -123,6 +123,9 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         if ($scope.articleSearchData && $scope.articleSearchData.title !== '') {
             $scope.articleSearchData.title = '';
         }
+        if ($scope.articleSearchData && $scope.articleSearchData.author !== '') {
+            $scope.articleSearchData.author = '';
+        }
     };
 
     //This will contain list of articles where the view can grab from
@@ -154,7 +157,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         }
 
         convenience.hideLoadingScreen();
-        
+
         var tempTags;
         var tags = [];
         for (var artidx = 0; artidx < articles.length; artidx++) {
@@ -198,7 +201,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     };
 
     //Every time screen loads, we will attempt to get articles from CRU's db
-    angular.element(document).ready(function() {
+    $scope.$on('$ionicView.enter', function() {
         // make request to db
         api.getAllArticles(successGettingArticles, failureGettingArticles);
     });

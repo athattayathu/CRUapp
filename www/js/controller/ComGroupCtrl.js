@@ -200,7 +200,7 @@ groups.controller('GroupCtrl', function($scope, $location, $ionicModal, constant
 
 .controller('GroupDetailCtrl', function($scope, $stateParams, $ionicModal, $location, constants, api, $cordovaSms, $ionicPopup) {
     var id = $stateParams.id; 
-
+    $scope.groupSignupData = {};
     var comSuccess = function(data) {
         var comGroups = [];
         var com = data.data;
@@ -229,10 +229,11 @@ groups.controller('GroupCtrl', function($scope, $location, $ionicModal, constant
         $scope.groupSignupModal.show();
     };
     
-    $scope.signupForGroup = function(groupSignupData) {
-        var name = groupSignupData.name;
-        var email = groupSignupData.email;
-        var phone = groupSignupData.phone;
+    $scope.signupForGroup = function() {
+
+        var name = $scope.groupSignupData.name;
+        var email = $scope.groupSignupData.email;
+        var phone = $scope.groupSignupData.phone;
         
         //CONFIGURATION
         var options = {
