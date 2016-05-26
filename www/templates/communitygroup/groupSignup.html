@@ -6,19 +6,24 @@
         </div>
     </ion-header-bar>
     <ion-content>
-        <form ng-submit="signupForGroup()">
+        <form name="signUp" ng-submit="signupForGroup()">
             <div class="list">
                 <label class="item item-input">
-                    <input type="text" placeholder="Full Name" ng-model="groupSignupData.name">
+                    <!--using 200 as the longest name because the Guinness book record holder is 214 in length-->
+                    <input type="text" name="name" ng-required="true" placeholder="Full Name" maxlength="200" ng-model="groupSignupData.name"> 
                 </label>
                 <label class="item item-input">
-                    <input type="tel" placeholder="Phone Number" ng-model="groupSignupData.phone">
+                    <!-- using 15 to include country code-->
+                    <input type="tel" name="num" ng-required="true" ng-minlength="10" ng-maxlength="15" maxlength="15" ng-pattern="/^1?\d{10,15}$/" placeholder="Phone Number" ng-model="groupSignupData.phone" >
+
                 </label>
+
                 <label class="item item-input">
-                    <input type="email" placeholder="Email Address" ng-model="groupSignupData.email">
+                    <!-- using 254 because that is the highest length allowed by email providers-->
+                    <input type="email" name="email"ng-required="true" placeholder="Email Address" maxlength="254" ng-model="groupSignupData.email">
                 </label>
                 <label class="item no-border-bottom">
-                    <button class="button button-block button-energized" ng-click="signupForGroup(groupSignupData)" type="submit">
+                    <button class="button button-block button-energized" type="submit" ng-disabled="signUp.$invalid" >
                         Join!
                     </button>
                 </label>

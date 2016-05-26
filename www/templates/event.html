@@ -1,4 +1,5 @@
-<ion-view view-title="{{myEvent.name}}">
+<ion-view>
+  <ion-nav-title>{{myEvent.name}}</ion-nav-title>
   <ion-content padding="true">
     <div class="list card">
         <div class="item">
@@ -11,15 +12,15 @@
             <p>{{myEvent.description}}</p>
         </div>
       </div>
-      
+
       <button class="icon-left ion-android-calendar button button-block button-positive" ng-click="addEventToCalendar(myEvent)">Add to Calendar</button>
-      
+
       <button class="icon-left ion-social-facebook button button-block button-calm" ng-click="showEventFacebook(myEvent.url)">Facebook</button>
-      
+
       <!-- Riding buttons -->
       <button class="icon-left ion-android-car button button-block button-balanced" ng-click="goToGetRide(myEvent._id)" ng-show="!isRiding && !isDriving">Get a ride</button>
       <button class="icon-left ion-checkmark-circled button-block button button-outline button-balanced" ng-click="viewDriverInfo(myEvent._id)" ng-show="isRiding">You Have a Ride</button>
-      
+
       <!-- Driving buttons -->
       <button class="icon-left ion-edit button button-block button-energized" ng-click="signUpToDrive(myEvent._id)" ng-show="!isDriving && !isRiding">Sign Up to Drive</button>
       <button class="icon-left ion-checkmark-circled button-block button button-outline button-energized" ng-click="viewRidersInfo(myEvent._id)" ng-show="isDriving">You are Driving</button>
