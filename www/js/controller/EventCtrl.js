@@ -8,10 +8,10 @@ eventCtrl.getTimeAndDate = function(timeAndDate)
 {
     //Split at the "T" to separate the date and time
     splitDateAndTime = timeAndDate.split('T');
-    
+
     //Splitting up the date into pieces
     date = splitDateAndTime[0].split('-');
-    
+
     //Splitting up the time into pieces
     time = splitDateAndTime[1].split(':');
 
@@ -41,7 +41,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
             val.secretEndDate = val.endDate;
             val.startDate = convenience.formatDate(new Date(val.startDate), true);
             val.endDate = convenience.formatDate(new Date(val.endDate), true);
-			
+
             if (!value.image) {
                 val.image = {url: constants.PLACEHOLDER_IMAGE};
             }
@@ -67,7 +67,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
             var queryParams = {
                 'ministries': {'$in': minsIds}
             };
-            
+
             api.getMinistryEvents(queryParams, success, err);
         }
 
@@ -99,7 +99,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
     var updateEvent = function(infoForEvent, val) {
         var originalStartDate = infoForEvent['secretStartDate'];
         var originalEndDate = infoForEvent['secretEndDate'];
-        
+
         startDateAndTime = eventCtrl.getTimeAndDate(originalStartDate);
         startDate = startDateAndTime[0];
         startTime = startDateAndTime[1];
@@ -108,9 +108,9 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
         endDate = endDateAndTime[0];
         endTime = endDateAndTime[1];
 
-        finalStartDate = eventCtrl.createDate(startDate, startTime);    
+        finalStartDate = eventCtrl.createDate(startDate, startTime);
         finalEndDate = eventCtrl.createDate(endDate, endTime);
-        
+
         $cordovaCalendar.deleteEvent({
             newTitle: infoForEvent['name'],
             location: infoForEvent['location'],
@@ -137,7 +137,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
       endDate = endDateAndTime[0];
       endTime = endDateAndTime[1];
 
-      finalStartDate = eventCtrl.createDate(startDate, startTime);    
+      finalStartDate = eventCtrl.createDate(startDate, startTime);
       finalEndDate = eventCtrl.createDate(endDate, endTime);
 
       //Using ngcordova to create an event to their native calendar
@@ -162,7 +162,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
 
 })
 
-.controller('EventCtrl', function($scope, $stateParams, $location, $localStorage, 
+.controller('EventCtrl', function($scope, $stateParams, $location, $localStorage,
  cal, browser, api, convenience, constants) {
     var val;
 
@@ -183,7 +183,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
         $scope.myEvent = val;
     };
 
-    var err = convenience.defaultErrorCallback('EventCtrl', 
+    var err = convenience.defaultErrorCallback('EventCtrl',
         'Could not retrieve event ' + $stateParams.eventId + ' from the server');
 
     api.getEvent($stateParams.eventId, success, err);
@@ -201,7 +201,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
     //When a button is clicked, this method is invoked
     //Takes in as a param the event
     $scope.addEventToCalendar = function(event) {
-        cal.addToCalendar(event.name, event.location, event._id, 
+        cal.addToCalendar(event.name, event.location, event._id,
             event.secretStartDate, event.secretEndDate);
     };
 
@@ -225,7 +225,7 @@ eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $l
         var index = convenience.containsAtIndex(id, driving);
         $location.path('/app/drive/' + id + '/riders/' + driving[index].driverId);
     };
-    
+
     $scope.showEventFacebook = function(url) {
         browser.open(url);
     };
