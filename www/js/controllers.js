@@ -25,7 +25,7 @@ module.run(function($ionicPlatform) {
     });
 });
 
-module.controller('AppCtrl', function(pushService, $rootScope, $scope, $ionicModal, $ionicPlatform, $timeout, $cordovaCalendar, $ionicPopup, $localStorage, $cordovaInAppBrowser) {
+module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ionicModal, $ionicPlatform, $timeout, $cordovaCalendar, $ionicPopup, $localStorage, $cordovaInAppBrowser) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -47,23 +47,47 @@ module.controller('AppCtrl', function(pushService, $rootScope, $scope, $ionicMod
     // Triggered in the login modal to close it
     $scope.closeLogin = function() {
         $scope.modal.hide();
-        $scope.modal.remove();
+        //$scope.modal.remove();
     };
 
     // Open the login modal
     $scope.login = function() {
       $scope.modal.show();
     };
+	
+	$scope.logout = function() {
+		$localStorage.set("leaderAPIKey", "");
+	};
 
+	loginSuc = function(response) {
+		var data = response.data;
+		console.log(response);
+		console.log(data);
+		if(data.success) {
+			var key = data.LeaderAPIKey;
+			$localStorage.set("leaderAPIKey", key);
+		}
+		else {
+			console.log("invalid");
+		}
+		$scope.closeLogin();
+	};
+	
+	loginFail = function(err) {
+		console.log("failure");
+		console.log(err);
+	};
     // Perform the login action when the user submits the login form
     $scope.doLogin = function() {
-
+		console.log($scope.loginData.username);
+		console.log($scope.loginData.password);
+		api.signin($scope.loginData.username, $scope.loginData.password, loginSuc, loginFail);
         // Simulate a login delay. Remove this and replace with your login
         // code if using a login system
-        $timeout(function() 
+        /*$timeout(function() 
         {
             $scope.closeLogin();
-        }, 1000);
+        }, 1000);*/
     };
 
     /**
