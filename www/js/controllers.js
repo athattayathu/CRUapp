@@ -53,11 +53,34 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
 
 	// Open the login modal
 	$scope.login = function() {
-	  $scope.modal.show();
+		if ($localStorage.get("leaderAPIKey")) {
+			var alertPopup = $ionicPopup.alert(
+			{
+				title: '<span class="bold">Error!</span>',
+				template: 'You are already logged in. Log out first to log in as another user.'
+			});
+		}
+		else {
+			$scope.modal.show();
+		}
 	};
 
 	$scope.logout = function() {
-		$localStorage.set("leaderAPIKey", "");
+		if ($localStorage.get("leaderAPIKey")) {
+			$localStorage.set("leaderAPIKey", "");
+			var alertPopup = $ionicPopup.alert(
+			{
+				title: '<span class="bold">Success!</span>',
+				template: 'You are now logged out.'
+			});
+		}
+		else {
+			var alertPopup = $ionicPopup.alert(
+			{
+				title: '<span class="bold">Error!</span>',
+				template: 'You are not logged in.'
+			});
+		}
 	};
 
 	loginSuc = function(response) {
@@ -67,16 +90,35 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
 		if(data.success) {
 			var key = data.LeaderAPIKey;
 			$localStorage.set("leaderAPIKey", key);
+
+			var alertPopup = $ionicPopup.alert(
+			{
+				title: '<span class="bold">Success!</span>',
+				template: 'You are now logged in.'
+			});
+
+			$scope.closeLogin();
 		}
 		else {
 			console.log("invalid");
+
+			var alertPopup = $ionicPopup.alert(
+			{
+				title: '<span class="bold">Error!</span>',
+				template: 'Sorry, those login credentials are not valid.'
+			});
 		}
-		$scope.closeLogin();
 	};
 
 	loginFail = function(err) {
 		console.log("failure");
 		console.log(err);
+
+		var alertPopup = $ionicPopup.alert(
+		{
+			title: '<span class="bold">Error!</span>',
+			template: 'Could not reach login server or a server error occurred.'
+		});
 	};
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {
