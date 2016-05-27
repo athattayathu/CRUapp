@@ -55,7 +55,7 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
     $scope.login = function() {
       $scope.modal.show();
     };
-	
+
 	$scope.logout = function() {
 		$localStorage.set("leaderAPIKey", "");
 	};
@@ -73,7 +73,7 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
 		}
 		$scope.closeLogin();
 	};
-	
+
 	loginFail = function(err) {
 		console.log("failure");
 		console.log(err);
