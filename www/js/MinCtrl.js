@@ -1,10 +1,8 @@
 var min = angular.module('starter.controllers.min', ["PushModule"]);
 
-min.controller('MinCtrl', function($scope, $location, $ionicHistory, req, $localStorage, $ionicPopup,
+min.controller('MinCtrl', function($scope, $location, $ionicHistory, api, $localStorage, $ionicPopup,
  selectedCampuses, constants, convenience, pushService) {
     convenience.showLoadingScreen('Loading Ministries');
-
-    var url = constants.BASE_SERVER_URL + "ministries/search";
     
     var or = [];
     selectedCampuses.getCampuses().forEach(function(c) {
@@ -40,7 +38,7 @@ min.controller('MinCtrl', function($scope, $location, $ionicHistory, req, $local
         $location.path('/app/error');
     };
 
-    req.post(url, queryParams, success, err);
+    api.getFilteredMinistries(queryParams, success, err);
     /**
     * This function is meant to  support the header contining lists. This function will return a boolean: whether or not
     * the header has changed from the previous item.
