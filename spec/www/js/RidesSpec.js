@@ -202,6 +202,51 @@ describe('GetRideCtrl', function() {
 
    		expect(location.path).toHaveBeenCalledWith('/app/error');
    	});
+
+    // characterization tests
+    it('can sort rides by number of passengers', function() {
+        const unsorted = [{seatsLeft: 2, seatsLeft: 1, seatsLeft: 3, seatsLeft: 4}];
+        const sorted = [{seatsLeft: 1, seatsLeft: 2, seatsLeft: 3, seatsLeft: 4}];
+
+        expect(sortDrivers(unsorted)).toEqual(sorted);
+    });
+
+    it('checks if the driver\'s name is valild', function() {
+        expect(isValidName('')).toBe('');
+        expect(isValidName(null)).toBe(null);
+        expect(isValidName('  Tanner   ')).toEqual('Tanner');
+    });
+
+    it('checks if the phone is valid', function() {
+        expect(isValidPhoneNumber('1234567890')).toEqual('1234567890');
+        expect(isValidPhoneNumber(true)).toEqual(true);
+    });
+
+    it('checks if the trip direction is valid', function() {
+        expect(isValidTripDirection('burgundy')).toEqual('burgundy');
+        expect(isValidTripDirection(undefined)).toBeUndefined;
+    });
+
+    it('checks if the number of seats is valid', function() {
+        expect(isValidSeatsNumber(20)).toEqual(20);
+        expect(null).toBeNull;
+    });
+
+    it('checks if the times are valid', function() {
+        expect(isValidTime(9)).toBeTrue;
+        expect(isValidTime('pink')).toBeTrue;
+        expect(isValidTime(null)).toBeTrue;
+    });
+
+    it('checks if the location is valid', function() {
+        expect(isValidLocation('USA')).toEqual('USA');
+        expect(isValidLocation(undefined)).toBeUndefined;
+        expect(isValidLocation(false)).toBeFalse;
+    });
+
+    it('changes the trip type', function() {
+        expect(changeTriptype('cat')).toEqual('both');
+    });
 });
 
 describe('ChooseDriverCtrl', function() {
