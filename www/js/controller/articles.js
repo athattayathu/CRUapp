@@ -151,9 +151,9 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         $scope.articles = articles;
 
         //Debugging to view data
-
+        console.log("Debugging to view article data");
         for (var i = 0; i < articles.length; i++) {
-            console.log(articles[i]);
+            console.log('article at index %d: %O', i, articles[i]);
         }
 
         convenience.hideLoadingScreen();
