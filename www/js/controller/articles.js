@@ -131,20 +131,26 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         // regex (?i: makes it case insensitive)
         var queryParams = {};
 
-        $scope.showResultsBar();
+        var anySearch = false;
 
         if (typeof $scope.articleSearchData.title !== 'undefined' && $scope.articleSearchData.title) {
             $scope.searchString += $scope.articleSearchData.title;
             queryParams['title'] = {'$regex':  '(?i:' + $scope.articleSearchData.title + ')'};
+            anySearch = true;
         }
 
         if (typeof $scope.articleSearchData.author !== 'undefined' && $scope.articleSearchData.author) {
             $scope.searchString += ' by ' + $scope.articleSearchData.author;
             queryParams['author'] = {'$regex':  '(?i:' + $scope.articleSearchData.author + ')'};
+            anySearch = true;
         }
 
-        api.getFilteredArticles(queryParams, successGettingArticles, failureGettingArticles);
-        console.log('SEARCHING' + $scope.articleSearchData.title);
+        if (anySearch) {
+            api.getFilteredArticles(queryParams, successGettingArticles, failureGettingArticles);
+            console.log('SEARCHING' + $scope.articleSearchData.title);
+
+            $scope.showResultsBar();
+        }
 
         $scope.articleModal.hide();
     };
@@ -158,6 +164,10 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         }
         if ($scope.articleSearchData && $scope.articleSearchData.author !== '') {
             $scope.articleSearchData.author = '';
+        }
+
+        for (var k = 0; k < $scope.tags.length; ++k) {
+            $scope.tags[k].checked = false;
         }
 
         $scope.hideResultsBar();
