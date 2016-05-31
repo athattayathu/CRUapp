@@ -204,6 +204,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     $scope.$on('$ionicView.enter', function() {
         // make request to db
         api.getAllArticles(successGettingArticles, failureGettingArticles);
+        api.getAllArticleTags(successGettingArticleTags, failureGettingArticleTags);
     });
 
     //When clicking a specific article, it will reroute to another page

@@ -197,6 +197,10 @@ utils.factory('api', ['$localStorage', 'req', 'constants', function($localStorag
             var url = constants.BASE_SERVER_URL + 'resources?LeaderAPIKey=' + key;
             req.get(url, success, err);
         },
+		getAllArticleTags: function(success, err) {
+			var url = constants.BASE_SERVER_URL + 'resourcetags';
+			req.get(url, success, err);
+		},
 		signin: function(username, password, success, err) {
 			var url = constants.BASE_SERVER_URL + 'signin';
 			var params = {username: username,
