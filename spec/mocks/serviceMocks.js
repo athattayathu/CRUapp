@@ -212,6 +212,24 @@ cruMocks.factory('api', ['req', 'constants', function(req, constants) {
         getAllArticles: function(success, err) {
             var url = constants.BASE_SERVER_URL + 'resources/';
             req.get(url, success, err);
+        },
+        getFilteredMinistries: function(queryParams, success, err){
+            var url = constants.BASE_SERVER_URL + "ministries/search";
+            req.get(url, queryParams, success, err);
+        },
+        getAllCampuses: function(success, err){
+            var url = constants.BASE_SERVER_URL + 'campuses';
+            req.get(url, success, err);
+        },
+        getVideoList: function(success, err){
+            var url = 'https://www.googleapis.com/youtube/v3/search?key=' + constants.YT_API_KEY + '&channelId=' + constants.YT_CHANNEL_ID +
+        '&part=snippet,id&order=date&maxResults=50';
+            req.get(url, success, err);
+        },
+        getFilteredVideoList: function(title, success, err){
+            url = "https://www.googleapis.com/youtube/v3/search?key=" + constants.YT_API_KEY + "&channelId=" + constants.YT_CHANNEL_ID + "&q=" + title;
+            url += "&part=snippet,id&order=date&maxResults=50";
+            req.get(url, success, err);
         }
     };
 }]);
