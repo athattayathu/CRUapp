@@ -4,7 +4,7 @@ describe('articles controller', function() {
 	var ctrl;
 	var httpBackend;
 	var location;
-	
+
 	beforeEach(angular.mock.module("articles"));
 	beforeEach(angular.mock.module('CruMocks'));
 
@@ -41,7 +41,8 @@ describe('articles controller', function() {
 		scope.applyTags();
 		expect(scope.articles.length).toEqual(1);
 		for (var i = 0; i < scope.articles.length; ++i) {
-			expect(scope.articles[i].visible).toEqual(false);
+			// If no tags are checked (or if no tags), all articles are visible
+			expect(scope.articles[i].visible).toEqual(true);
 		}
 
 		scope.articles = [{visible: false, tags: ["1"]}];
@@ -58,7 +59,8 @@ describe('articles controller', function() {
 		scope.applyTags();
 		expect(scope.articles.length).toEqual(1);
 		for (var i = 0; i < scope.articles.length; ++i) {
-			expect(scope.articles[i].visible).toEqual(false);
+			// If no tags are checked (or if no tags), all articles are visible
+			expect(scope.articles[i].visible).toEqual(true);
 		}
 	});
 
