@@ -1,7 +1,7 @@
 var videos = angular.module('videos', ['starter.controllers.utils']);
 
 videos.controller('videos_controller',function(browser, $scope, $ionicModal,
- req, convenience, constants, $location) {
+ api, convenience, constants, $location) {
     convenience.showLoadingScreen('Loading YouTube Videos');
 
     $scope.videoSearchData = {};
@@ -52,8 +52,8 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
 
     var failure_getting_videos = function(data) {
         //Just a sad message :(
-        console.log('Failure got data: ' + data);
-
+        console.log('Failure got data: ' + JSON.stringify(data));
+        convenience.hideLoadingScreen();
         //Goes to that lovely error page we have
         $location.path('/app/error');
     };
