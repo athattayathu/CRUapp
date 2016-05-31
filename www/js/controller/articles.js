@@ -192,19 +192,6 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         }
 
         convenience.hideLoadingScreen();
-
-        var tempTags;
-        var tags = [];
-        for (var artidx = 0; artidx < articles.length; artidx++) {
-            tempTags = articles[artidx].tags;
-            for (var i = 0; i < tempTags.length; ++i) {
-                if (tags.indexOf(tempTags[i]) == -1) {
-                    tempTags[i].checked = false;
-                    tags.push(tempTags[i]);
-                }
-            }
-        }
-        $scope.tags = tags;
     };
 
     //When failing to get the articles from the db, the following function
