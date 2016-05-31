@@ -97,7 +97,7 @@ utils.factory('browser', ['$cordovaInAppBrowser', function($cordovaInAppBrowser)
 utils.factory('api', ['$localStorage', 'req', 'constants', function($localStorage, req, constants) {
     return {
         getAllEvents: function(success, err) {
-            var url = constants.BASE_SERVER_URL + 'events'; 
+            var url = constants.BASE_SERVER_URL + 'events';
             req.get(url, success, err);
         },
         getMinistryEvents: function(params, success, err) {
@@ -199,7 +199,7 @@ utils.factory('api', ['$localStorage', 'req', 'constants', function($localStorag
         },
 		signin: function(username, password, success, err) {
 			var url = constants.BASE_SERVER_URL + 'signin';
-			var params = {username: username, 
+			var params = {username: username,
 			password: password};
 			console.log(params);
 			req.post(url, params, success, err);
@@ -219,7 +219,7 @@ utils.factory('cal', ['$localStorage', '$cordovaCalendar', '$ionicPopup', functi
             endDate = endDateAndTime[0];
             endTime = endDateAndTime[1];
 
-            finalStartDate = this.createDate(startDate, startTime);    
+            finalStartDate = this.createDate(startDate, startTime);
             finalEndDate = this.createDate(endDate, endTime);
 
             //Using ngcordova to create an event to their native calendar
@@ -235,9 +235,9 @@ utils.factory('cal', ['$localStorage', '$cordovaCalendar', '$ionicPopup', functi
                     listOfAddedEvents = {};
                 }
 
-                listOfAddedEvents[_id] = {'name': eventName, 'location': location['street'], 
+                listOfAddedEvents[_id] = {'name': eventName, 'location': location['street'],
                     'secretStartDate': originalStartDate, 'secretEndDate': originalEndDate};
-                
+
                 //Added event information to local phone
                 $localStorage.setObject('listOfAddedEvents', listOfAddedEvents);
 
@@ -258,10 +258,10 @@ utils.factory('cal', ['$localStorage', '$cordovaCalendar', '$ionicPopup', functi
         getTimeAndDate: function(timeAndDate) {
             //Split at the "T" to separate the date and time
             splitDateAndTime = timeAndDate.split('T');
-            
+
             //Splitting up the date into pieces
             date = splitDateAndTime[0].split('-');
-            
+
             //Splitting up the time into pieces
             time = splitDateAndTime[1].split(':');
             return [date, time];
@@ -316,7 +316,7 @@ utils.factory('convenience' , ['$location', '$ionicLoading', function($location,
                 $location.path('/app/error');
             };
         },
-        
+
         //Get the JSON object to send the the server from a location string
         getLocationObject: function(locationStr) {
             if (locationStr) {
@@ -325,28 +325,28 @@ utils.factory('convenience' , ['$location', '$ionicLoading', function($location,
                 var street, suburb, state, postcode;
                 var country = "USA";
                 var splitState;
-                
+
                 //get street address
                 if (size >= 1) {
                     street = splitStr[0];
                 }
-                
+
                 //get city
                 if (size >= 2) {
                     suburb = splitStr[1];
                 }
-                
+
                 //state and postal code
                 if (size >= 3) {
                     splitState = splitStr[2].split(" ");
-                    
+
                     if (splitState.length > 1) {
                         postcode = splitState[1];
                     }
-                    
+
                     state = splitState[0];
                 }
-                
+
                 return {
                     postcode: postcode,
                     suburb: suburb,
@@ -355,43 +355,43 @@ utils.factory('convenience' , ['$location', '$ionicLoading', function($location,
                     country: country
                 };
             }
-            
+
             return {
                 country: "USA"
             };
         },
-        
+
         //Takes a location object and returns the formated address
         formatLocation: function(location) {
             var address = '';
             var country = 'USA';
-            
+
             if (location) {
                 //street address
                 if (location.street1) {
                     address += location.street1;
                 }
-                
+
                 //city
                 if (location.suburb) {
                     address += ", " + location.suburb;
                 }
-                
+
                 //state
                 if (location.state) {
                     address += ", " + location.state;
-                    
+
                     //postal code
                     if (location.postcode) {
                         address += " " + location.postcode;
                     }
                 }
-                
+
                 address += country;
                 console.log(address);
                 return address;
             }
-            
+
             return country;
         },
 
