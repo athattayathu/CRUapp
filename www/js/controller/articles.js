@@ -79,7 +79,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         for (var k = 0; k < $scope.tags.length; ++k) {
             if ($scope.tags[k].checked) {
                 anyTags = true;
-                $scope.searchString += ' ' + $scope.tags.title;
+                $scope.searchString += '{' + $scope.tags[k].title + '}';
             }
         }
         for (var i = 0; i < $scope.articles.length; ++i) {
