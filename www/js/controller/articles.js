@@ -41,6 +41,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     $scope.articleSearchData = {};
     $scope.isSearchingIOS = false;
     $scope.isSearchingAndroid = false;
+    $scope.searchString = '';
 
     // creating the modal using ionicModal
     $ionicModal.fromTemplateUrl('templates/resources/articles/articleSearch.html', {
