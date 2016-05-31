@@ -74,30 +74,55 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     };
 
     $scope.applyTags = function() {
+        var anyTags = false;
+
+        for (var k = 0; k < $scope.tags.length; ++k) {
+            if ($scope.tags[k].checked) {
+                anyTags = true;
+                $scope.searchString += ' ' + $scope.tags.title;
+            }
+        }
         for (var i = 0; i < $scope.articles.length; ++i) {
-            $scope.articles[i].visible = false;
-            for (var k = 0; k < $scope.tags.length; ++k) {
-                if ($scope.tags[k].checked) {
-                    for (var j = 0; j < $scope.articles[i].tags.length; ++j) {
-                        if ($scope.tags[k]._id == $scope.articles[i].tags[j]) {
-                            $scope.articles[i].visible = true;
+            if (anyTags) {
+                $scope.articles[i].visible = false;
+                for (var k = 0; k < $scope.tags.length; ++k) {
+                    if ($scope.tags[k].checked) {
+                        for (var j = 0; j < $scope.articles[i].tags.length; ++j) {
+                            if ($scope.tags[k]._id == $scope.articles[i].tags[j]) {
+                                $scope.articles[i].visible = true;
+                            }
                         }
                     }
                 }
             }
+            else {
+                $scope.articles[i].visible = true;
+            }
         }
+
+        if (anyTags) {
+            $scope.showResultsBar();
+        }
+
         $scope.tagsModal.hide();
     };
 
     $scope.showResultsBar = function() {
 
-        $scope.searchString = '';
         $scope.isSearchingIOS = ionic.Platform.isIOS();
         $scope.isSearchingAndroid = ionic.Platform.isAndroid();
 
         if (! ($scope.isSearchingAndroid || $scope.isSearchingIOS)) {
             $scope.isSearchingIOS = true;
         }
+
+    }
+
+    $scope.hideResultsBar = function() {
+
+        $scope.searchString = '';
+        $scope.isSearchingIOS = false;
+        $scope.isSearchingAndroid = false;
 
     }
 
@@ -108,12 +133,12 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
 
         $scope.showResultsBar();
 
-        if (typeof $scope.articleSearchData.title !== 'undefined') {
+        if (typeof $scope.articleSearchData.title !== 'undefined' && $scope.articleSearchData.title) {
             $scope.searchString += $scope.articleSearchData.title;
             queryParams['title'] = {'$regex':  '(?i:' + $scope.articleSearchData.title + ')'};
         }
 
-        if (typeof $scope.articleSearchData.author !== 'undefined') {
+        if (typeof $scope.articleSearchData.author !== 'undefined' && $scope.articleSearchData.author) {
             $scope.searchString += ' by ' + $scope.articleSearchData.author;
             queryParams['author'] = {'$regex':  '(?i:' + $scope.articleSearchData.author + ')'};
         }
@@ -127,8 +152,6 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     $scope.clearSearch = function() {
         // make request to db
         api.getAllArticles(successGettingArticles, failureGettingArticles);
-        $scope.isSearchingIOS = false;
-        $scope.isSearchingAndroid = false;
 
         if ($scope.articleSearchData && $scope.articleSearchData.title !== '') {
             $scope.articleSearchData.title = '';
@@ -136,6 +159,8 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         if ($scope.articleSearchData && $scope.articleSearchData.author !== '') {
             $scope.articleSearchData.author = '';
         }
+
+        $scope.hideResultsBar();
     };
 
     //This will contain list of articles where the view can grab from
