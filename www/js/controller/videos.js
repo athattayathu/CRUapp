@@ -1,4 +1,4 @@
-var videos = angular.module('videos', ['starter.controllers.utils']);
+var videos = angular.module('videos', ['starter.controllers.utils', 'restUtils', 'BrowserModule']);
 
 videos.controller('videos_controller',function(browser, $scope, $ionicModal,
  req, constants, $location, uiUtil) {

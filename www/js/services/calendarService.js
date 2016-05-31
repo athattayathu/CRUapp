@@ -1,4 +1,4 @@
-var utils = angular.module('starter.controllers.utils');
+var utils = angular.module('CalendarModule', []);
 
 // calendar utility for adding things to the native calendar
 utils.factory('cal', ['$localStorage', '$cordovaCalendar', '$ionicPopup', function($localStorage, $cordovaCalendar, $ionicPopup) {

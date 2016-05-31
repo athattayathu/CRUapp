@@ -1,4 +1,4 @@
-var teams = angular.module('TeamCtrl', []);
+var teams = angular.module('TeamCtrl', ['restUtils']);
 
 teams.controller('TeamCtrl', function($scope, $location, api, constants, convenience, $localStorage) {
 	var mins = $localStorage.getObject(constants.CAMPUSES_CONFIG).ministries;

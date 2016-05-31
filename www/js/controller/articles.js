@@ -8,7 +8,7 @@
 
 //'starter.controllers.articles' is just name of the module
 //Requires some of the functionality from 'starter.controllers.utils'
-var articles = angular.module('articles', ['starter.controllers.utils', 'ionic']);
+var articles = angular.module('articles', ['starter.controllers.utils', 'restUtils', 'ionic', 'BrowserModule', 'uiUtils']);
 
 //This is a helper function to sort the articles by date
 var sortArticles = function(unsorted) {
@@ -33,8 +33,8 @@ var sortArticles = function(unsorted) {
 //constants are used for the defines in the util.js file
 //$location is used for rerouting to a different page
 articles.controller('articles_controller',function($scope, $ionicModal, api, constants,
- convenience, $location, browser) {
-    convenience.showLoadingScreen('Loading Articles');
+ uiUtil, $location, browser) {
+    uiUtil.showLoadingScreen('Loading Articles');
 
     // set up searching modal for articles
     // data structure for holding search parameters

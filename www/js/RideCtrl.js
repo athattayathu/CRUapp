@@ -1,4 +1,4 @@
-var ride = angular.module('starter.controllers.rides', ['starter.controllers.utils', 'PushModule']);
+var ride = angular.module('starter.controllers.rides', ['starter.controllers.utils', 'PushModule', 'storageModule']);
 
 //returns false if not in the array and true otherwise
 var checkArr = function(item, arr) {

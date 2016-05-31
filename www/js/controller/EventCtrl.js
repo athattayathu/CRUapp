@@ -1,4 +1,4 @@
-var eventCtrl = angular.module('EventCtrl', []);
+var eventCtrl = angular.module('EventCtrl', ['restUtils', 'storageModule', 'uiUtils', 'CalendarModule', 'BrowserModule']);
 
 //timeAndDate is in the form 2015-10-15T19:00:00.000Z
 //returns an array with:

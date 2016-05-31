@@ -1,6 +1,29 @@
-var utils = angular.module('starter.controllers.utils');
+var restUtils = angular.module('restUtils',[]);
 
-utils.factory('api', ['req', 'constants', function(req, constants) {
+// utitity methods for making http requests/posts
+restUtils.factory('req', ['$window', '$http', function($window, $http) {
+    return {
+        get: function(url, success, err) {
+            // Simple GET request
+            $http({
+                method: 'GET',
+                url: url
+            }).then(success, err);
+        },
+        post: function(url, data, success, err) {
+            $http.post(url, data).then(success, err);
+        },
+        delete: function(url, success, err) {
+            // Simple GET request
+            $http({
+                method: 'DELETE',
+                url: url
+            }).then(success, err);
+        }
+    };
+}]);
+
+restUtils.factory('api', ['req', 'constants', function(req, constants) {
     return {
         getAllCampuses: function(success, err){
             var url = constants.BASE_SERVER_URL + 'campuses';
@@ -44,18 +67,18 @@ utils.factory('api', ['req', 'constants', function(req, constants) {
             var url = constants.BASE_SERVER_URL + 'ministries/' + id;
             req.get(url, success, err);
         },
-		getAllCommunityGroups: function(success, err) {
+        getAllCommunityGroups: function(success, err) {
             var url = constants.BASE_SERVER_URL + 'communitygroups/';
             req.get(url, success, err);
         },
-		getCommunityGroup: function(id, success, err) {
-			var url = constants.BASE_SERVER_URL + 'communitygroups/' + id;
+        getCommunityGroup: function(id, success, err) {
+            var url = constants.BASE_SERVER_URL + 'communitygroups/' + id;
             req.get(url, success, err);
-		},
-		getUser: function(id, success, err) {
-			var url = constants.BASE_SERVER_URL + 'users/' + id;
+        },
+        getUser: function(id, success, err) {
+            var url = constants.BASE_SERVER_URL + 'users/' + id;
             req.get(url, success, err);
-		},
+        },
         getFilteredRides: function(params, success, err) {
             var url = constants.BASE_SERVER_URL + 'rides/find';
             req.post(url, params, success, err);

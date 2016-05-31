@@ -1,6 +1,6 @@
-var utils = angular.module('starter.controllers.utils');
+var storageService = angular.module('storageModule', []);
 // sets up easy access key value store for local storage on device
-utils.factory('$localStorage', ['$window', function($window, constants) {
+storageService.factory('$localStorage', ['$window', function($window, constants) {
     return {
         set: function(key, value) {
             $window.localStorage[key] = value;

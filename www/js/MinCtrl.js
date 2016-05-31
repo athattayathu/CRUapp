@@ -1,4 +1,4 @@
-var min = angular.module('starter.controllers.min', ["PushModule"]);
+var min = angular.module('starter.controllers.min', ["PushModule", 'storageModule']);
 
 min.controller('MinCtrl', function($scope, $location, $ionicHistory, req, $localStorage, $ionicPopup,
  selectedCampuses, constants, pushService, uiUtil) {

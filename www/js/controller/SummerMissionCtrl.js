@@ -1,4 +1,4 @@
-var missionCtrl = angular.module('MissionCtrl', []);
+var missionCtrl = angular.module('MissionCtrl', ['restUtils', 'storageModule','CalendarModule', 'BrowserModule']);
 
 missionCtrl.controller('MissionsCtrl', function($scope, $location, api, constants, convenience, uiUtil) {
     uiUtil.showLoadingScreen('Loading Summer Missions');

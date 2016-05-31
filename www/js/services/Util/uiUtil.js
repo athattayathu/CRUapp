@@ -1,4 +1,4 @@
-var uiUtils = angular.module('starter.controllers.utils');
+var uiUtils = angular.module('uiUtils',[]);
 
 uiUtils.factory('uiUtil',function($ionicLoading){
 	return {

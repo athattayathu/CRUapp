@@ -1,4 +1,4 @@
-var groups = angular.module('ComGroupCtrl', []);
+var groups = angular.module('ComGroupCtrl', ['restUtils']);
 
 var err = function(location) {
     return function(data) {
@@ -71,6 +71,7 @@ var parseDate = function(eventDate) {
     };
 };
 var foo = {timeStart: new Date(), timeEnd: new Date()};
+
 groups.controller('GroupCtrl', function($scope, $location, $ionicModal, constants, api) {
     $scope.days = dayArr;
     var date = new Date();
