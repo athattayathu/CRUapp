@@ -86,17 +86,27 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
                 }
             }
         }
-        $scope.isSearching = true;
         $scope.tagsModal.hide();
     };
+
+    $scope.showResultsBar = function() {
+
+        $scope.searchString = '';
+        $scope.isSearchingIOS = ionic.Platform.isIOS();
+        $scope.isSearchingAndroid = ionic.Platform.isAndroid();
+
+        if (! ($scope.isSearchingAndroid || $scope.isSearchingIOS)) {
+            $scope.isSearchingIOS = true;
+        }
+
+    }
 
     // submit the search results
     $scope.search = function() {
         // regex (?i: makes it case insensitive)
         var queryParams = {};
-        $scope.searchString = '';
-        $scope.isSearchingIOS = ionic.Platform.isIOS();
-        $scope.isSearchingAndroid = ionic.Platform.isAndroid();
+
+        $scope.showResultsBar();
 
         if (typeof $scope.articleSearchData.title !== 'undefined') {
             $scope.searchString += $scope.articleSearchData.title;
