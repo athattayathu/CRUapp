@@ -25,6 +25,32 @@ module.run(function($ionicPlatform) {
 	});
 });
 
+var LoginAlerts = function () {};
+
+LoginAlerts.Error_AlreadyLoggedIn = function ($ionicPopup) {
+	Alerts.ErrorAlert($ionicPopup, 'You are already logged in. Log out first to log in as another user.');
+};
+
+LoginAlerts.Success_LoggedOut = function ($ionicPopup) {
+	Alerts.SuccessAlert($ionicPopup, 'You are now logged out.');
+};
+
+LoginAlerts.Success_LoggedIn = function ($ionicPopup) {
+	Alerts.SuccessAlert($ionicPopup, 'You are now logged in.');
+};
+
+LoginAlerts.Error_NotLoggedIn = function ($ionicPopup) {
+	Alerts.ErrorAlert($ionicPopup, 'You are not logged in.');
+};
+
+LoginAlerts.Error_BadCredentials = function ($ionicPopup) {
+	Alerts.ErrorAlert($ionicPopup, 'Sorry, those login credentials are not valid.');
+};
+
+LoginAlerts.Error_NoServer = function ($ionicPopup) {
+	Alerts.ErrorAlert($ionicPopup, 'Could not reach login server or a server error occurred.');
+};
+
 module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ionicModal, $ionicPlatform, $timeout, $cordovaCalendar, $ionicPopup, $localStorage, $cordovaInAppBrowser) {
 
 	// With the new view caching in Ionic, Controllers are only called
@@ -54,11 +80,7 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
 	// Open the login modal
 	$scope.login = function() {
 		if ($localStorage.get("leaderAPIKey")) {
-			var alertPopup = $ionicPopup.alert(
-			{
-				title: '<span class="bold">Error!</span>',
-				template: 'You are already logged in. Log out first to log in as another user.'
-			});
+			LoginAlerts.Error_AlreadyLoggedIn($ionicPopup);
 		}
 		else {
 			$scope.modal.show();
@@ -68,18 +90,10 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
 	$scope.logout = function() {
 		if ($localStorage.get("leaderAPIKey")) {
 			$localStorage.set("leaderAPIKey", "");
-			var alertPopup = $ionicPopup.alert(
-			{
-				title: '<span class="bold">Success!</span>',
-				template: 'You are now logged out.'
-			});
+			LoginAlerts.Success_LoggedOut($ionicPopup);
 		}
 		else {
-			var alertPopup = $ionicPopup.alert(
-			{
-				title: '<span class="bold">Error!</span>',
-				template: 'You are not logged in.'
-			});
+			LoginAlerts.Error_NotLoggedIn($ionicPopup);
 		}
 	};
 
@@ -90,35 +104,19 @@ module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ion
 		if(data.success) {
 			var key = data.LeaderAPIKey;
 			$localStorage.set("leaderAPIKey", key);
-
-			var alertPopup = $ionicPopup.alert(
-			{
-				title: '<span class="bold">Success!</span>',
-				template: 'You are now logged in.'
-			});
-
+			LoginAlerts.Success_LoggedIn($ionicPopup);
 			$scope.closeLogin();
 		}
 		else {
 			console.log("invalid");
-
-			var alertPopup = $ionicPopup.alert(
-			{
-				title: '<span class="bold">Error!</span>',
-				template: 'Sorry, those login credentials are not valid.'
-			});
+			LoginAlerts.Error_BadCredentials($ionicPopup);
 		}
 	};
 
 	loginFail = function(err) {
 		console.log("failure");
 		console.log(err);
-
-		var alertPopup = $ionicPopup.alert(
-		{
-			title: '<span class="bold">Error!</span>',
-			template: 'Could not reach login server or a server error occurred.'
-		});
+		LoginAlerts.Error_NoServer($ionicPopup);
 	};
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {

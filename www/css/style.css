@@ -3,6 +3,14 @@
     font-weight: bold;
 }
 
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
 .disabled {
     opacity: 0.4;
 }
