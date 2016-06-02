@@ -1,11 +1,8 @@
 var videos = angular.module('videos', ['starter.controllers.utils']);
 
 videos.controller('videos_controller',function(browser, $scope, $ionicModal,
- req, convenience, constants, $location) {
+ api, convenience, constants, $location) {
     convenience.showLoadingScreen('Loading YouTube Videos');
-
-    var CHANNEL_ID = 'UCe-RJ-3Q3tUqJciItiZmjdg';
-    var YT_API_KEY = 'AIzaSyA5LSnAk7YftObCYuPSZIQi21WE6zZA1j0';
 
     $scope.videoSearchData = {};
     $scope.isSearchingIOS = false;
@@ -31,12 +28,8 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
         $scope.isSearchingAndroid = ionic.Platform.isAndroid();
 
         if (typeof $scope.videoSearchData.title !== 'undefined') {
-            console.log("doing title search " + $scope.videoSearchData.title);
             $scope.searchString = $scope.videoSearchData.title;
-
-            url = "https://www.googleapis.com/youtube/v3/search?key=" + YT_API_KEY + "&channelId=" + CHANNEL_ID + "&q=" + $scope.videoSearchData.title;
-            url += "&part=snippet,id&order=date&maxResults=50";
-            req.get(url, success_getting_videos, failure_getting_videos);
+            api.getFilteredVideoList($scope.videoSearchData.title, success_getting_videos, failure_getting_videos);
         }
         $scope.videoModal.hide();
     };
@@ -44,10 +37,8 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
     $scope.clearSearch = function() {
         $scope.isSearchingIOS = false;
         $scope.isSearchingAndroid = false;
-        url = 'https://www.googleapis.com/youtube/v3/search?key=' + YT_API_KEY + '&channelId=' + CHANNEL_ID +
-        '&part=snippet,id&order=date&maxResults=50';
-
-        req.get(url, success_getting_videos, failure_getting_videos);
+        
+        api.getVideoList(success_getting_videos, failure_getting_videos);
     };
 
 
@@ -61,17 +52,14 @@ videos.controller('videos_controller',function(browser, $scope, $ionicModal,
 
     var failure_getting_videos = function(data) {
         //Just a sad message :(
-        console.log('Failure got data: ' + data);
-
+        console.log('Failure got data: ' + JSON.stringify(data));
+        convenience.hideLoadingScreen();
         //Goes to that lovely error page we have
         $location.path('/app/error');
     };
 
     angular.element(document).ready(function() {
-        url = 'https://www.googleapis.com/youtube/v3/search?key=' + YT_API_KEY + '&channelId=' + CHANNEL_ID +
-        '&part=snippet,id&order=date&maxResults=50';
-
-        req.get(url, success_getting_videos, failure_getting_videos);
+        api.getVideoList(success_getting_videos, failure_getting_videos);
     });
 
     $scope.view_selected_video = function(video) {

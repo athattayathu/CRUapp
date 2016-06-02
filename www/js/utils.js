@@ -6,6 +6,8 @@ utils.constant('constants', {
     'PLACEHOLDER_IMAGE': 'img/cru-logo.jpg',
     'PERSON_IMAGE': 'img/person.png',
     'GCM_SENDER_ID': '276638088511',
+    'YT_CHANNEL_ID' : 'UCe-RJ-3Q3tUqJciItiZmjdg',
+    'YT_API_KEY' : 'AIzaSyA5LSnAk7YftObCYuPSZIQi21WE6zZA1j0',
 
     'CAMPUSES_CONFIG': 'campuses',
     'MY_RIDES_RIDER': 'myRidesRider',
@@ -205,9 +207,26 @@ utils.factory('api', ['$localStorage', 'req', 'constants', function($localStorag
 			var url = constants.BASE_SERVER_URL + 'signin';
 			var params = {username: username,
 			password: password};
-			console.log(params);
 			req.post(url, params, success, err);
-		}
+		},
+        getFilteredMinistries: function(queryParams, success, err){
+            var url = constants.BASE_SERVER_URL + "ministries/search";
+            req.get(url, queryParams, success, err);
+        },
+        getAllCampuses: function(success, err){
+            var url = constants.BASE_SERVER_URL + 'campuses';
+            req.get(url, success, err);
+        },
+        getVideoList: function(success, err){
+            var url = 'https://www.googleapis.com/youtube/v3/search?key=' + constants.YT_API_KEY + '&channelId=' + constants.YT_CHANNEL_ID +
+        '&part=snippet,id&order=date&maxResults=50';
+            req.get(url, success, err);
+        },
+        getFilteredVideoList: function(title, success, err){
+            url = "https://www.googleapis.com/youtube/v3/search?key=" + constants.YT_API_KEY + "&channelId=" + constants.YT_CHANNEL_ID + "&q=" + title;
+            url += "&part=snippet,id&order=date&maxResults=50";
+            req.get(url, success, err);
+        }
     };
 }]);
 

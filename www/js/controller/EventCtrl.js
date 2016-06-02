@@ -25,7 +25,7 @@ eventCtrl.createDate = function(date, time)
     return date;
 }
 
-eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $location, req, constants, $ionicHistory,
+eventCtrl.controller('EventsCtrl', function($scope, $location, $localStorage, $location, constants, $ionicHistory,
  allEvents, $cordovaCalendar, convenience, api) {
     convenience.showLoadingScreen('Loading Events');
 
