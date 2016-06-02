@@ -25,9 +25,9 @@ module.run(function($ionicPlatform) {
 	});
 });
 
-var LoginAlerts = function () {};
+var Alerts = function () {};
 
-LoginAlerts.Helper_ErrorAlert = function ($ionicPopup, message) {
+Alerts.ErrorAlert = function ($ionicPopup, message) {
 	var alertPopup = $ionicPopup.alert(
 	{
 		title: '<span class="bold error">Error!</span>',
@@ -35,7 +35,7 @@ LoginAlerts.Helper_ErrorAlert = function ($ionicPopup, message) {
 	});
 };
 
-LoginAlerts.Helper_SuccessAlert = function ($ionicPopup, message) {
+Alerts.SuccessAlert = function ($ionicPopup, message) {
 	var alertPopup = $ionicPopup.alert(
 	{
 		title: '<span class="bold success">Success!</span>',
@@ -43,28 +43,30 @@ LoginAlerts.Helper_SuccessAlert = function ($ionicPopup, message) {
 	});
 };
 
+var LoginAlerts = function () {};
+
 LoginAlerts.Error_AlreadyLoggedIn = function ($ionicPopup) {
-	LoginAlerts.Helper_ErrorAlert($ionicPopup, 'You are already logged in. Log out first to log in as another user.');
+	Alerts.ErrorAlert($ionicPopup, 'You are already logged in. Log out first to log in as another user.');
 };
 
 LoginAlerts.Success_LoggedOut = function ($ionicPopup) {
-	LoginAlerts.Helper_SuccessAlert($ionicPopup, 'You are now logged out.');
+	Alerts.SuccessAlert($ionicPopup, 'You are now logged out.');
 };
 
 LoginAlerts.Success_LoggedIn = function ($ionicPopup) {
-	LoginAlerts.Helper_SuccessAlert($ionicPopup, 'You are now logged in.');
+	Alerts.SuccessAlert($ionicPopup, 'You are now logged in.');
 };
 
 LoginAlerts.Error_NotLoggedIn = function ($ionicPopup) {
-	LoginAlerts.Helper_ErrorAlert($ionicPopup, 'You are not logged in.');
+	Alerts.ErrorAlert($ionicPopup, 'You are not logged in.');
 };
 
 LoginAlerts.Error_BadCredentials = function ($ionicPopup) {
-	LoginAlerts.Helper_ErrorAlert($ionicPopup, 'Sorry, those login credentials are not valid.');
+	Alerts.ErrorAlert($ionicPopup, 'Sorry, those login credentials are not valid.');
 };
 
 LoginAlerts.Error_NoServer = function ($ionicPopup) {
-	LoginAlerts.Helper_ErrorAlert($ionicPopup, 'Could not reach login server or a server error occurred.');
+	Alerts.ErrorAlert($ionicPopup, 'Could not reach login server or a server error occurred.');
 };
 
 module.controller('AppCtrl', function(pushService, api, $rootScope, $scope, $ionicModal, $ionicPlatform, $timeout, $cordovaCalendar, $ionicPopup, $localStorage, $cordovaInAppBrowser) {
