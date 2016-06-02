@@ -25,24 +25,6 @@ module.run(function($ionicPlatform) {
 	});
 });
 
-var Alerts = function () {};
-
-Alerts.ErrorAlert = function ($ionicPopup, message) {
-	var alertPopup = $ionicPopup.alert(
-	{
-		title: '<span class="bold error">Error!</span>',
-		template: message
-	});
-};
-
-Alerts.SuccessAlert = function ($ionicPopup, message) {
-	var alertPopup = $ionicPopup.alert(
-	{
-		title: '<span class="bold success">Success!</span>',
-		template: message
-	});
-};
-
 var LoginAlerts = function () {};
 
 LoginAlerts.Error_AlreadyLoggedIn = function ($ionicPopup) {
