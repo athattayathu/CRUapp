@@ -41,6 +41,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     $scope.articleSearchData = {};
     $scope.isSearchingIOS = false;
     $scope.isSearchingAndroid = false;
+    $scope.searchString = '';
 
     // creating the modal using ionicModal
     $ionicModal.fromTemplateUrl('templates/resources/articles/articleSearch.html', {
@@ -74,42 +75,83 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     };
 
     $scope.applyTags = function() {
+        var anyTags = false;
+
+        for (var k = 0; k < $scope.tags.length; ++k) {
+            if ($scope.tags[k].checked) {
+                anyTags = true;
+                $scope.searchString += '{' + $scope.tags[k].title + '}';
+            }
+        }
         for (var i = 0; i < $scope.articles.length; ++i) {
-            $scope.articles[i].visible = false;
-            for (var k = 0; k < $scope.tags.length; ++k) {
-                if ($scope.tags[k].checked) {
-                    for (var j = 0; j < $scope.articles[i].tags.length; ++j) {
-                        if ($scope.tags[k]._id == $scope.articles[i].tags[j]) {
-                            $scope.articles[i].visible = true;
+            if (anyTags) {
+                $scope.articles[i].visible = false;
+                for (var k = 0; k < $scope.tags.length; ++k) {
+                    if ($scope.tags[k].checked) {
+                        for (var j = 0; j < $scope.articles[i].tags.length; ++j) {
+                            if ($scope.tags[k]._id == $scope.articles[i].tags[j]) {
+                                $scope.articles[i].visible = true;
+                            }
                         }
                     }
                 }
             }
+            else {
+                $scope.articles[i].visible = true;
+            }
         }
-        $scope.isSearching = true;
+
+        if (anyTags) {
+            $scope.showResultsBar();
+        }
+
         $scope.tagsModal.hide();
     };
+
+    $scope.showResultsBar = function() {
+
+        $scope.isSearchingIOS = ionic.Platform.isIOS();
+        $scope.isSearchingAndroid = ionic.Platform.isAndroid();
+
+        if (! ($scope.isSearchingAndroid || $scope.isSearchingIOS)) {
+            $scope.isSearchingIOS = true;
+        }
+
+    }
+
+    $scope.hideResultsBar = function() {
+
+        $scope.searchString = '';
+        $scope.isSearchingIOS = false;
+        $scope.isSearchingAndroid = false;
+
+    }
 
     // submit the search results
     $scope.search = function() {
         // regex (?i: makes it case insensitive)
         var queryParams = {};
-        $scope.searchString = '';
-        $scope.isSearchingIOS = ionic.Platform.isIOS();
-        $scope.isSearchingAndroid = ionic.Platform.isAndroid();
 
-        if (typeof $scope.articleSearchData.title !== 'undefined') {
+        var anySearch = false;
+
+        if (typeof $scope.articleSearchData.title !== 'undefined' && $scope.articleSearchData.title) {
             $scope.searchString += $scope.articleSearchData.title;
             queryParams['title'] = {'$regex':  '(?i:' + $scope.articleSearchData.title + ')'};
+            anySearch = true;
         }
 
-        if (typeof $scope.articleSearchData.author !== 'undefined') {
+        if (typeof $scope.articleSearchData.author !== 'undefined' && $scope.articleSearchData.author) {
             $scope.searchString += ' by ' + $scope.articleSearchData.author;
             queryParams['author'] = {'$regex':  '(?i:' + $scope.articleSearchData.author + ')'};
+            anySearch = true;
         }
 
-        api.getFilteredArticles(queryParams, successGettingArticles, failureGettingArticles);
-        console.log('SEARCHING' + $scope.articleSearchData.title);
+        if (anySearch) {
+            api.getFilteredArticles(queryParams, successGettingArticles, failureGettingArticles);
+            console.log('SEARCHING' + $scope.articleSearchData.title);
+
+            $scope.showResultsBar();
+        }
 
         $scope.articleModal.hide();
     };
@@ -117,8 +159,6 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     $scope.clearSearch = function() {
         // make request to db
         api.getAllArticles(successGettingArticles, failureGettingArticles);
-        $scope.isSearchingIOS = false;
-        $scope.isSearchingAndroid = false;
 
         if ($scope.articleSearchData && $scope.articleSearchData.title !== '') {
             $scope.articleSearchData.title = '';
@@ -126,6 +166,12 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         if ($scope.articleSearchData && $scope.articleSearchData.author !== '') {
             $scope.articleSearchData.author = '';
         }
+
+        for (var k = 0; k < $scope.tags.length; ++k) {
+            $scope.tags[k].checked = false;
+        }
+
+        $scope.hideResultsBar();
     };
 
     //This will contain list of articles where the view can grab from
@@ -151,25 +197,12 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
         $scope.articles = articles;
 
         //Debugging to view data
-
+        console.log("Debugging to view article data");
         for (var i = 0; i < articles.length; i++) {
-            console.log(articles[i]);
+            console.log('article at index %d: %O', i, articles[i]);
         }
 
         convenience.hideLoadingScreen();
-
-        var tempTags;
-        var tags = [];
-        for (var artidx = 0; artidx < articles.length; artidx++) {
-            tempTags = articles[artidx].tags;
-            for (var i = 0; i < tempTags.length; ++i) {
-                if (tags.indexOf(tempTags[i]) == -1) {
-                    tempTags[i].checked = false;
-                    tags.push(tempTags[i]);
-                }
-            }
-        }
-        $scope.tags = tags;
     };
 
     //When failing to get the articles from the db, the following function
@@ -204,6 +237,7 @@ articles.controller('articles_controller',function($scope, $ionicModal, api, con
     $scope.$on('$ionicView.enter', function() {
         // make request to db
         api.getAllArticles(successGettingArticles, failureGettingArticles);
+        api.getAllArticleTags(successGettingArticleTags, failureGettingArticleTags);
     });
 
     //When clicking a specific article, it will reroute to another page
